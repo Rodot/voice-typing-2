@@ -29,17 +29,7 @@
 
 ## Available Commands
 
-Initial setup
-
 ```bash
-sudo apt install python3-full pipx
-pipx install poetry
-poetry install
-poetry run pre-commit install
-```
-
-Quality check
-
-```bash
+# Quality check
 poetry run pre-commit run --all-files
 ```

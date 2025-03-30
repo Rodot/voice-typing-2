@@ -15,4 +15,4 @@ services:
       - ASR_QUANTIZATION=float16
     runtime: nvidia
     volumes:
-      - ./cache:/root/.cache
+      - ./.docker_cache:/root/.cache
