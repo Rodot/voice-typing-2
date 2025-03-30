@@ -1,6 +1,6 @@
 """Integration tests for the HTTP Whisper client."""
 
-from voice_typing.infrastructure.whisper_client import HttpWhisperClient
+from voice_typing.whisper_client import HttpWhisperClient
 
 
 def test_transcribe_jfk_speech() -> None:
