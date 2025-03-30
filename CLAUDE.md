@@ -30,6 +30,6 @@
 ## Available Commands
 
 ```bash
-# Quality check
+# Quality check, to run after each modification
 poetry run pre-commit run --all-files
 ```

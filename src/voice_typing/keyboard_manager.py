@@ -15,7 +15,7 @@ class KeyboardManager:
         on_recording_stop: Callable[[], None],
     ) -> None:
         """Initialize keyboard manager with trigger keys and callbacks"""
-        self.trigger_keys: set[Key] = {Key.alt, Key.ctrl, Key.cmd}
+        self.trigger_keys: set[Key] = {Key.ctrl_l, Key.alt_l, Key.cmd}
         self.on_recording_start = on_recording_start
         self.on_recording_stop = on_recording_stop
         self.currently_pressed_keys: set[Key] = set()

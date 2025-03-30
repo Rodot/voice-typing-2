@@ -22,3 +22,9 @@ And add this to your PATH
 ```path
 C:\Users\pea\AppData\Roaming\Python\Scripts\poetry
 ```
+
+## Execution
+
+``` bash
+poetry run voice-typing
+```

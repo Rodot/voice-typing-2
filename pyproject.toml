@@ -24,6 +24,9 @@ authors = ["User"]
 readme = "README.md"
 packages = [{include = "voice_typing", from = "src"}]
 
+[tool.poetry.scripts]
+voice-typing = "voice_typing.main:main"
+
 [tool.poetry.dependencies]
 python = ">=3.10"
 requests = "^2.31.0"
