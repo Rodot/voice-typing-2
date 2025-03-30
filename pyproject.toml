@@ -1,0 +1,79 @@
+[project]
+name = "voice-typing"
+version = "0.1.0"
+description = "Voice-to-text application for keyboard-free typing"
+authors = [
+    {name = "User"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+]
+
+[tool.poetry]
+name = "voice-typing"
+version = "0.1.0"
+description = "Voice-to-text application for keyboard-free typing"
+authors = ["User"]
+readme = "README.md"
+packages = [{include = "voice_typing", from = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.13"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+black = "^25.1.0"
+mypy = "^1.15.0"
+ruff = "^0.11.2"
+pylint = "^3.3.6"
+isort = "^6.0.1"
+bandit = "^1.8.3"
+pre-commit = "^4.2.0"
+pytest-cov = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]  # Updated to highest supported version
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+strict_optional = true
+
+[tool.ruff]
+target-version = "py312"  # Updated to highest supported version
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "N", "UP", "ANN", "S", "BLE", "FBT", "A", "C4", "DTZ", "T10", "EM", "ICN", "G", "INP", "PIE", "T20", "PT", "Q", "RSE", "RET", "SIM", "TID", "ERA", "PGH", "PL", "TRY", "NPY", "RUF"]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/**/*.py" = ["S101"]
+
+[tool.pylint]
+max-line-length = 88
+disable = ["C0111", "R0903", "C0103"]
+extension-pkg-whitelist = ["pydantic"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+pythonpath = ["src"]
