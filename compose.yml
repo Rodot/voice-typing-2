@@ -1,0 +1,18 @@
+services:
+  whisper-asr:
+    image: onerahmet/openai-whisper-asr-webservice:latest-gpu
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    ports:
+      - "9000:9000"
+    environment:
+      - ASR_MODEL=turbo
+      - ASR_ENGINE=whisperx
+      - ASR_DEVICE=cuda
+      - ASR_QUANTIZATION=float16
+    runtime: nvidia
+    volumes:
+      - ./cache:/root/.cache 
