@@ -6,8 +6,10 @@ authors = [
     {name = "User"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.9"
 dependencies = [
+    "requests>=2.31.0",
+    "pytest (>=8.3.5,<9.0.0)"
 ]
 
 [tool.poetry]
@@ -19,7 +21,8 @@ readme = "README.md"
 packages = [{include = "voice_typing", from = "src"}]
 
 [tool.poetry.dependencies]
-python = ">=3.13"
+python = ">=3.9"
+requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
@@ -31,6 +34,7 @@ isort = "^6.0.1"
 bandit = "^1.8.3"
 pre-commit = "^4.2.0"
 pytest-cov = "^6.0.0"
+types-requests = "^2.32.0.20250328"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -46,7 +50,7 @@ profile = "black"
 line_length = 88
 
 [tool.mypy]
-python_version = "3.13"
+python_version = "3.9"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true

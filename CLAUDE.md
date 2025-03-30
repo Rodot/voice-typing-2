@@ -31,14 +31,15 @@
 
 Initial setup
 
-```powershell
-python -m pip install poetry
-python -m poetry install
-python -m poetry run pre-commit install
+```bash
+sudo apt install python3-full pipx
+pipx install poetry
+poetry install
+poetry run pre-commit install
 ```
 
 Quality check
 
-```powershell
-python -m poetry run pre-commit run --all-files
+```bash
+poetry run pre-commit run --all-files
 ```
