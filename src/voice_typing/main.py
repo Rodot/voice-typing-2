@@ -8,8 +8,8 @@ from typing import Final
 import requests
 
 from voice_typing.audio_recorder import AudioRecorder
-from voice_typing.keyboard_manager import KeyboardManager
-from voice_typing.text_input_manager import TextInputManager
+from voice_typing.shortcut_trigger import ShortcutTrigger
+from voice_typing.text_typer import TextTyper
 from voice_typing.whisper_client import HttpWhisperClient
 
 logging.basicConfig(
@@ -28,9 +28,9 @@ class VoiceTypingApp:
     def __init__(self) -> None:
         """Initialize the voice typing application."""
         self.audio_recorder = AudioRecorder(sample_rate=self.SAMPLE_RATE)
-        self.text_input = TextInputManager()
+        self.text_input = TextTyper()
         self.whisper_client = HttpWhisperClient(base_url=self.WHISPER_URL)
-        self.keyboard_manager = KeyboardManager(
+        self.shortcut_manager = ShortcutTrigger(
             on_recording_start=self.start_recording,
             on_recording_stop=self.stop_recording,
         )
@@ -38,22 +38,22 @@ class VoiceTypingApp:
     def start(self) -> None:
         """Start the voice typing application."""
         logger.info("Voice Typing started. Press Alt+Ctrl+Cmd to record.")
-        listener = self.keyboard_manager.start_listening()
+        listener = self.shortcut_manager.start_listening()
         try:
             listener.join()
         except KeyboardInterrupt:
             logger.info("Shutting down Voice Typing...")
         finally:
-            self.keyboard_manager.stop_listening()
+            self.shortcut_manager.stop_listening()
 
     def start_recording(self) -> None:
         """Start recording audio."""
+        logger.info("Recording started")
         self.audio_recorder.start_recording()
 
     def stop_recording(self) -> None:
         """Stop recording and process the audio."""
-        self.keyboard_manager.set_processing(is_processing=True)
-
+        logger.info("Recording stopped")
         self.audio_recorder.stop_recording()
 
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
@@ -78,16 +78,10 @@ class VoiceTypingApp:
         else:
             logger.info("No audio recorded")
 
-        # Reset processing state
-        self.keyboard_manager.set_processing(is_processing=False)
-
     def _clean_transcript(self, transcript: str) -> str:
         """Clean the transcript by removing extra whitespace and line breaks."""
-        # Remove leading/trailing whitespace
         cleaned = transcript.strip()
-        # Replace line breaks with spaces
         cleaned = cleaned.replace("\n", " ")
-        # Replace multiple spaces with single space
         return " ".join(cleaned.split())
 
 
