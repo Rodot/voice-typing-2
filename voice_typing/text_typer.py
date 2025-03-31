@@ -12,7 +12,7 @@ class TextTyper:
         """Initialize with keyboard controller"""
         self.keyboard = Controller()
 
-    def type_text(self, text: str, delay: float = 0.01) -> None:
+    def type(self, text: str, delay: float = 0.01) -> None:
         """Type text using keyboard emulation"""
         for char in text:
             time.sleep(delay)

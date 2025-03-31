@@ -68,7 +68,7 @@ class VoiceTypingApp:
                 cleaned_text = self._clean_transcript(transcript)
                 if cleaned_text:
                     logger.info("Typing: %s", cleaned_text)
-                    self.text_typer.type_text(cleaned_text)
+                    self.text_typer.type(cleaned_text)
                 else:
                     logger.info("No text detected")
             except requests.RequestException:
