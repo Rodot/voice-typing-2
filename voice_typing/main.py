@@ -1,5 +1,3 @@
-"""Main application module for voice typing."""
-
 import logging
 import os
 import tempfile
@@ -25,21 +23,20 @@ class VoiceTypingApp:
     SAMPLE_RATE: Final[int] = 16000
 
     def __init__(self) -> None:
-        """Initialize the voice typing application."""
         self.audio_recorder = AudioRecorder(sample_rate=self.SAMPLE_RATE)
         self.text_typer = TextTyper()
         self.whisper_client = HttpWhisperClient(base_url=self.WHISPER_URL)
         self.shortcut_trigger = ShortcutTrigger(
-            on_recording_start=self.start_recording,
-            on_recording_stop=self.stop_recording,
+            on_shortcut_press=self.start_recording,
+            on_shortcut_release=self.stop_recording_process_and_type,
         )
 
     def start(self) -> None:
-        """Start the voice typing application."""
         while not self.whisper_client.health_check():
             logger.info("Waiting for Whisper API to be available...")
             time.sleep(3)
-        logger.info("Voice Typing started. Press Alt+Ctrl+Cmd to record.")
+        logger.info("Voice Typing started.")
+        logger.info("Press Cmd+Alt_R+E for English, Cmd+Alt_L+F for French")
         self.shortcut_trigger.start_listening()
         try:
             while True:
@@ -49,19 +46,18 @@ class VoiceTypingApp:
         finally:
             self.shortcut_trigger.stop_listening()
 
-    def start_recording(self) -> None:
-        """Start recording audio."""
+    def start_recording(self, command: str) -> None:
+        logger.info("Recording %s", command)
         self.audio_recorder.start_recording()
 
-    def stop_recording(self) -> None:
-        """Stop recording and process the audio."""
+    def stop_recording_process_and_type(self, command: str) -> None:
         self.text_typer.type("...")
         try:
             self.audio_recorder.stop_recording()
             with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
                 temp_path = temp_file.name
                 self.audio_recorder.save_to_file(temp_path)
-                transcript = self.whisper_client.transcribe(temp_path)
+                transcript = self.whisper_client.transcribe(temp_path, command)
                 transcript = self._clean_transcript(transcript)
         finally:
             self.text_typer.erase("...")
@@ -70,14 +66,12 @@ class VoiceTypingApp:
         self.text_typer.type(transcript)
 
     def _clean_transcript(self, transcript: str) -> str:
-        """Clean the transcript by removing extra whitespace and line breaks."""
         cleaned = transcript.strip()
         cleaned = cleaned.replace("\n", " ")
         return " ".join(cleaned.split())
 
 
 def main() -> None:
-    """Run the voice typing application."""
     app = VoiceTypingApp()
     app.start()
 

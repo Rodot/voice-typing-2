@@ -11,19 +11,22 @@ class ShortcutTrigger:
 
     def __init__(
         self,
-        on_recording_start: Callable[[], None],
-        on_recording_stop: Callable[[], None],
+        on_shortcut_press: Callable[[str], None],
+        on_shortcut_release: Callable[[str], None],
     ) -> None:
-        """Initialize shortcut manager with trigger keys and callbacks"""
-        self.trigger_keys: set[Key] = {Key.ctrl_l, Key.alt_l, Key.cmd}
-        self.on_recording_start = on_recording_start
-        self.on_recording_stop = on_recording_stop
-        self.currently_pressed_keys: set[Key] = set()
-        self.enabled = True
+        self.shortcuts: dict[frozenset, str] = {
+            frozenset([Key.shift_l, Key.f1]): "en",
+            frozenset([Key.shift_l, Key.f2]): "fr",
+        }
+
+        self.on_shortcut_press = on_shortcut_press
+        self.on_shortcut_release = on_shortcut_release
+        self.currently_pressed_keys: set = set()
+        self.active_command: str | None = None
+        self.active_shortcut: frozenset | None = None
         self.listener: pynput.keyboard.Listener | None = None
 
     def start_listening(self) -> pynput.keyboard.Listener:
-        """Start listening for keyboard events"""
         self.listener = pynput.keyboard.Listener(
             on_press=self._on_key_press, on_release=self._on_key_release
         )
@@ -31,27 +34,29 @@ class ShortcutTrigger:
         return self.listener
 
     def stop_listening(self) -> None:
-        """Stop listening for keyboard events"""
         if self.listener:
             self.listener.stop()
             self.listener = None
 
     def _on_key_press(self, key: pynput.keyboard.Key) -> None:
-        """Handle key press events"""
         self.currently_pressed_keys.add(key)
-        if self.trigger_keys.issubset(self.currently_pressed_keys) and self.enabled:
-            self.enabled = False
-            self.on_recording_start()
+
+        if self.active_command is not None:
+            return
+
+        pressed_keys = frozenset(self.currently_pressed_keys)
+        for shortcut, command in self.shortcuts.items():
+            if shortcut.issubset(pressed_keys) and len(shortcut) > 0:
+                self.active_command = command
+                self.on_shortcut_press(command)
+                break
 
     def _on_key_release(self, key: pynput.keyboard.Key) -> None:
-        """Handle key release events"""
         if key not in self.currently_pressed_keys:
             return
+
         self.currently_pressed_keys.remove(key)
-        if (
-            not self.enabled
-            and key in self.trigger_keys
-            and not any(k in self.currently_pressed_keys for k in self.trigger_keys)
-        ):
-            self.enabled = True
-            self.on_recording_stop()
+
+        if not len(self.currently_pressed_keys) and self.active_command is not None:
+            self.on_shortcut_release(self.active_command)
+            self.active_command = None

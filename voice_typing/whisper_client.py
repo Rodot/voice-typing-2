@@ -11,8 +11,7 @@ class HttpWhisperClient:
 
     base_url: str
 
-    def transcribe(self, audio_path: str) -> str:
-        """Transcribe audio data by sending it to the Whisper API"""
+    def transcribe(self, audio_path: str, language: str = "en") -> str:
         endpoint = f"{self.base_url}/asr"
 
         with open(audio_path, "rb") as audio_file:
@@ -21,14 +20,13 @@ class HttpWhisperClient:
                 "encode": "true",
                 "task": "transcribe",
                 "output": "txt",
-                "language": "en",
+                "language": language,
             }
             response = requests.post(endpoint, files=files, params=params, timeout=30)
             response.raise_for_status()
             return response.text
 
     def health_check(self) -> bool:
-        """Check if the Whisper API is healthy."""
         endpoint = f"{self.base_url}/docs"
         try:
             response = requests.get(endpoint, timeout=10)
