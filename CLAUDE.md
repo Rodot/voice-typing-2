@@ -30,6 +30,7 @@
 ## Available Commands
 
 ```bash
-# Quality check, to run after each modification
+# Quality suite: formatting, linting, pytest
+# Run after each modification
 poetry run pre-commit run --all-files
 ```

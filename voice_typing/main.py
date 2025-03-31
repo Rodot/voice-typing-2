@@ -3,6 +3,7 @@
 import logging
 import os
 import tempfile
+import time
 from typing import Final
 
 import requests
@@ -37,10 +38,14 @@ class VoiceTypingApp:
 
     def start(self) -> None:
         """Start the voice typing application."""
+        while not self.whisper_client.health_check():
+            logger.info("Waiting for Whisper API to be available...")
+            time.sleep(3)
         logger.info("Voice Typing started. Press Alt+Ctrl+Cmd to record.")
-        listener = self.shortcut_manager.start_listening()
+        self.shortcut_manager.start_listening()
         try:
-            listener.join()
+            while True:
+                time.sleep(1.0)
         except KeyboardInterrupt:
             logger.info("Shutting down Voice Typing...")
         finally:
@@ -48,12 +53,10 @@ class VoiceTypingApp:
 
     def start_recording(self) -> None:
         """Start recording audio."""
-        logger.info("Recording started")
         self.audio_recorder.start_recording()
 
     def stop_recording(self) -> None:
         """Stop recording and process the audio."""
-        logger.info("Recording stopped")
         self.audio_recorder.stop_recording()
 
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
@@ -73,7 +76,6 @@ class VoiceTypingApp:
             except OSError:
                 logger.exception("Error handling audio file")
             finally:
-                # Clean up temp file
                 os.unlink(temp_path)
         else:
             logger.info("No audio recorded")

@@ -22,7 +22,7 @@ version = "0.1.0"
 description = "Voice-to-text application for keyboard-free typing"
 authors = ["User"]
 readme = "README.md"
-packages = [{include = "voice_typing", from = "src"}]
+packages = [{include = "voice_typing"}]
 
 [tool.poetry.scripts]
 voice-typing = "voice_typing.main:main"

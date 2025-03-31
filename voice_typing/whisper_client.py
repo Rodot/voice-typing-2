@@ -21,3 +21,13 @@ class HttpWhisperClient:
             response = requests.post(endpoint, files=files, params=params, timeout=30)
             response.raise_for_status()
             return response.text
+
+    def health_check(self) -> bool:
+        """Check if the Whisper API is healthy."""
+        endpoint = f"{self.base_url}/docs"
+        try:
+            response = requests.get(endpoint, timeout=10)
+            response.raise_for_status()
+        except requests.RequestException:
+            return False
+        return True

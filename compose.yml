@@ -9,7 +9,10 @@ services:
     ports:
       - "9000:9000"
     environment:
+      # - ASR_MODEL=base
       - ASR_MODEL=turbo
+      # - ASR_ENGINE=openai_whisper
+      # - ASR_ENGINE=faster_whisper
       - ASR_ENGINE=whisperx
       - ASR_DEVICE=cuda
       - ASR_QUANTIZATION=float16
