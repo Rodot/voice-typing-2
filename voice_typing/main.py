@@ -6,6 +6,7 @@ from typing import Final
 
 from voice_typing.audio_recorder import AudioRecorder
 from voice_typing.shortcut_trigger import ShortcutTrigger
+from voice_typing.sound_player import SoundPlayer
 from voice_typing.text_typer import TextTyper
 from voice_typing.whisper_client import HttpWhisperClient
 
@@ -26,6 +27,7 @@ class VoiceTypingApp:
         self.audio_recorder = AudioRecorder(sample_rate=self.SAMPLE_RATE)
         self.text_typer = TextTyper()
         self.whisper_client = HttpWhisperClient(base_url=self.WHISPER_URL)
+        self.sound_player = SoundPlayer()
         self.shortcut_trigger = ShortcutTrigger(
             on_shortcut_press=self.start_recording,
             on_shortcut_release=self.stop_recording_process_and_type,
@@ -48,10 +50,11 @@ class VoiceTypingApp:
 
     def start_recording(self, command: str) -> None:
         logger.info("Recording %s", command)
+        self.sound_player.play("start_recording.wav")
         self.audio_recorder.start_recording()
 
     def stop_recording_process_and_type(self, command: str) -> None:
-        self.text_typer.type("...")
+        self.sound_player.play("stop_recording.wav")
         try:
             self.audio_recorder.stop_recording()
             with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
@@ -60,7 +63,6 @@ class VoiceTypingApp:
                 transcript = self.whisper_client.transcribe(temp_path, command)
                 transcript = self._clean_transcript(transcript)
         finally:
-            self.text_typer.erase("...")
             os.unlink(temp_path)
         logger.info("Typing: %s", transcript)
         self.text_typer.type(transcript)
