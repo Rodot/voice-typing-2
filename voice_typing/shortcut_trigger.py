@@ -52,11 +52,7 @@ class ShortcutTrigger:
                 break
 
     def _on_key_release(self, key: pynput.keyboard.Key) -> None:
-        if key not in self.currently_pressed_keys:
-            return
-
         self.currently_pressed_keys.remove(key)
-
         if not len(self.currently_pressed_keys) and self.active_command is not None:
             self.on_shortcut_release(self.active_command)
             self.active_command = None
