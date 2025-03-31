@@ -69,7 +69,6 @@ class VoiceTypingApp:
 
     def _clean_transcript(self, transcript: str) -> str:
         cleaned = transcript.strip()
-        cleaned = cleaned.replace("\n", " ")
         return " ".join(cleaned.split())
 
 
