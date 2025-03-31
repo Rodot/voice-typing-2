@@ -12,15 +12,13 @@ class TextTyper:
         """Initialize with keyboard controller"""
         self.keyboard = Controller()
 
-    def type(self, text: str, delay: float = 0.01) -> None:
+    def type(self, text: str) -> None:
         """Type text using keyboard emulation"""
-        for char in text:
-            time.sleep(delay)
-            self.keyboard.type(char)
+        self.keyboard.type(text)
 
-    def erase(self, text: str, delay: float = 0.01) -> None:
+    def erase(self, text: str) -> None:
         """Erase text using keyboard emulation"""
         for _char in text:
-            time.sleep(delay)
+            time.sleep(0.01)
             self.keyboard.press(Key.backspace)
             self.keyboard.release(Key.backspace)
