@@ -17,7 +17,12 @@ class HttpWhisperClient:
 
         with open(audio_path, "rb") as audio_file:
             files = {"audio_file": (audio_path, audio_file, "audio/wav")}
-            params = {"encode": "true", "task": "transcribe", "output": "txt"}
+            params = {
+                "encode": "true",
+                "task": "transcribe",
+                "output": "txt",
+                "language": "en",
+            }
             response = requests.post(endpoint, files=files, params=params, timeout=30)
             response.raise_for_status()
             return response.text
