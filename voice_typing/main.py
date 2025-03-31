@@ -35,10 +35,10 @@ class VoiceTypingApp:
 
     def start(self) -> None:
         while not self.whisper_client.health_check():
-            logger.info("Waiting for Whisper API to be available...")
+            logger.info("Waiting for Whisper API...")
             time.sleep(3)
         logger.info("Voice Typing started.")
-        logger.info("Press Cmd+Alt_R+E for English, Cmd+Alt_L+F for French")
+        logger.info("Press Shift+F1 for English, Shift+F2 for French")
         self.shortcut_trigger.start_listening()
         try:
             while True:
