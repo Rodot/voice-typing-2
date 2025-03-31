@@ -6,8 +6,6 @@ import tempfile
 import time
 from typing import Final
 
-import requests
-
 from voice_typing.audio_recorder import AudioRecorder
 from voice_typing.shortcut_trigger import ShortcutTrigger
 from voice_typing.text_typer import TextTyper
@@ -57,28 +55,19 @@ class VoiceTypingApp:
 
     def stop_recording(self) -> None:
         """Stop recording and process the audio."""
-        self.audio_recorder.stop_recording()
-
-        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
-            temp_path = temp_file.name
-
-        if self.audio_recorder.save_to_file(temp_path):
-            try:
+        self.text_typer.type("...")
+        try:
+            self.audio_recorder.stop_recording()
+            with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+                temp_path = temp_file.name
+                self.audio_recorder.save_to_file(temp_path)
                 transcript = self.whisper_client.transcribe(temp_path)
-                cleaned_text = self._clean_transcript(transcript)
-                if cleaned_text:
-                    logger.info("Typing: %s", cleaned_text)
-                    self.text_typer.type(cleaned_text)
-                else:
-                    logger.info("No text detected")
-            except requests.RequestException:
-                logger.exception("Error during transcription request")
-            except OSError:
-                logger.exception("Error handling audio file")
-            finally:
-                os.unlink(temp_path)
-        else:
-            logger.info("No audio recorded")
+                transcript = self._clean_transcript(transcript)
+        finally:
+            self.text_typer.erase("...")
+            os.unlink(temp_path)
+        logger.info("Typing: %s", transcript)
+        self.text_typer.type(transcript)
 
     def _clean_transcript(self, transcript: str) -> str:
         """Clean the transcript by removing extra whitespace and line breaks."""

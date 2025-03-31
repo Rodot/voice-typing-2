@@ -2,7 +2,7 @@
 
 import time
 
-from pynput.keyboard import Controller
+from pynput.keyboard import Controller, Key
 
 
 class TextTyper:
@@ -17,3 +17,10 @@ class TextTyper:
         for char in text:
             time.sleep(delay)
             self.keyboard.type(char)
+
+    def erase(self, text: str, delay: float = 0.01) -> None:
+        """Erase text using keyboard emulation"""
+        for _char in text:
+            time.sleep(delay)
+            self.keyboard.press(Key.backspace)
+            self.keyboard.release(Key.backspace)
