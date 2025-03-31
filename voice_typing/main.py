@@ -29,9 +29,9 @@ class VoiceTypingApp:
     def __init__(self) -> None:
         """Initialize the voice typing application."""
         self.audio_recorder = AudioRecorder(sample_rate=self.SAMPLE_RATE)
-        self.text_input = TextTyper()
+        self.text_typer = TextTyper()
         self.whisper_client = HttpWhisperClient(base_url=self.WHISPER_URL)
-        self.shortcut_manager = ShortcutTrigger(
+        self.shortcut_trigger = ShortcutTrigger(
             on_recording_start=self.start_recording,
             on_recording_stop=self.stop_recording,
         )
@@ -42,14 +42,14 @@ class VoiceTypingApp:
             logger.info("Waiting for Whisper API to be available...")
             time.sleep(3)
         logger.info("Voice Typing started. Press Alt+Ctrl+Cmd to record.")
-        self.shortcut_manager.start_listening()
+        self.shortcut_trigger.start_listening()
         try:
             while True:
                 time.sleep(1.0)
         except KeyboardInterrupt:
             logger.info("Shutting down Voice Typing...")
         finally:
-            self.shortcut_manager.stop_listening()
+            self.shortcut_trigger.stop_listening()
 
     def start_recording(self) -> None:
         """Start recording audio."""
@@ -68,7 +68,7 @@ class VoiceTypingApp:
                 cleaned_text = self._clean_transcript(transcript)
                 if cleaned_text:
                     logger.info("Typing: %s", cleaned_text)
-                    self.text_input.type_text(cleaned_text)
+                    self.text_typer.type_text(cleaned_text)
                 else:
                     logger.info("No text detected")
             except requests.RequestException:

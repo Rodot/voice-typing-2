@@ -9,5 +9,6 @@ def test_transcribe_jfk_speech() -> None:
     """
     audio_path = "./voice_typing/assets/jfk.wav"
     whisper_client = HttpWhisperClient(base_url="http://localhost:9000")
+    assert whisper_client.health_check()
     result = whisper_client.transcribe(audio_path)
     assert "ask not what your country can do for you" in result.lower()
