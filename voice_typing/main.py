@@ -43,9 +43,8 @@ class VoiceTypingApp:
         try:
             while True:
                 time.sleep(1.0)
-        except KeyboardInterrupt:
-            logger.info("Shutting down Voice Typing...")
         finally:
+            logger.info("Shutting down Voice Typing...")
             self.shortcut_trigger.stop_listening()
 
     def start_recording(self, command: str) -> None:

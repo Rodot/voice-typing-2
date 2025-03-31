@@ -72,8 +72,7 @@ target-version = "py312"  # Updated to highest supported version
 line-length = 88
 
 [tool.ruff.lint]
-select = ["E", "F", "B", "I", "N", "UP", "ANN", "S", "BLE", "FBT", "A", "C4", "DTZ", "T10", "EM", "ICN", "G", "INP", "PIE", "T20", "PT", "Q", "RSE", "RET", "SIM", "TID", "ERA", "PGH", "PL", "TRY", "NPY", "RUF"]
-ignore = []
+select = ["E", "F", "B", "I", "N", "UP", "ANN", "S", "BLE", "FBT", "A", "C4", "DTZ", "T10", "EM", "ICN", "G", "INP", "PIE", "T20", "PT", "Q", "RSE", "RET", "SIM", "TID", "ERA", "PGH", "PL", "TRY", "NPY", "RUF", "C901"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
