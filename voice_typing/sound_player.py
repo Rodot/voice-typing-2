@@ -25,7 +25,6 @@ class SoundPlayer:
             sound_path = self.ASSETS_DIR / sound_name
             data, sample_rate = sf.read(sound_path)
             self.sounds[sound_name] = {"data": data, "sample_rate": sample_rate}
-            logger.info("Loaded sound: %s", sound_name)
         except (FileNotFoundError, sf.SoundFileError):
             logger.exception("Failed to load sound %s", sound_name)
             return False
