@@ -1,9 +1,16 @@
 """Shortcut event management for voice typing."""
 
+import logging
 from collections.abc import Callable
 
 import pynput.keyboard
-from pynput.keyboard import Key
+from pynput.keyboard import Key, KeyCode
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 
 class ShortcutTrigger:
@@ -38,7 +45,9 @@ class ShortcutTrigger:
             self.listener.stop()
             self.listener = None
 
-    def _on_key_press(self, key: pynput.keyboard.Key) -> None:
+    def _on_key_press(self, key: Key | KeyCode | None) -> None:
+        if key is None:
+            return
         self.currently_pressed_keys.add(key)
 
         if self.active_command is not None:
@@ -51,9 +60,8 @@ class ShortcutTrigger:
                 self.on_shortcut_press(command)
                 break
 
-    def _on_key_release(self, key: pynput.keyboard.Key) -> None:
-        if key in self.currently_pressed_keys:
-            self.currently_pressed_keys.remove(key)
-        if not len(self.currently_pressed_keys) and self.active_command is not None:
+    def _on_key_release(self, _key: Key | KeyCode | None) -> None:
+        if self.active_command is not None:
             self.on_shortcut_release(self.active_command)
+            self.currently_pressed_keys.clear()
             self.active_command = None

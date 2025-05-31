@@ -53,6 +53,9 @@ class VoiceTypingApp:
         self.audio_recorder.start_recording()
 
     def stop_recording_process_and_type(self, command: str) -> None:
+        if not self.audio_recorder.recording:
+            return
+        logger.info("Stopping recording and processing %s", command)
         self.sound_player.play("stop_recording.wav")
         try:
             self.audio_recorder.stop_recording()
@@ -61,10 +64,12 @@ class VoiceTypingApp:
                 self.audio_recorder.save_to_file(temp_path)
                 transcript = self.whisper_client.transcribe(temp_path, command)
                 transcript = self._clean_transcript(transcript)
+                logger.info("Typing: %s", transcript)
+                self.text_typer.type(transcript)
+        except Exception:
+            logger.exception("Error during transcription")
         finally:
             os.unlink(temp_path)
-        logger.info("Typing: %s", transcript)
-        self.text_typer.type(transcript)
 
     def _clean_transcript(self, transcript: str) -> str:
         cleaned = transcript.strip()

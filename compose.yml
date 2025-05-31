@@ -1,11 +1,12 @@
 services:
   whisper-asr:
     image: onerahmet/openai-whisper-asr-webservice:latest-gpu
+    restart: unless-stopped
     deploy:
       resources:
         reservations:
           devices:
-            - capabilities: [gpu]
+            - capabilities: [ gpu ]
     ports:
       - "9000:9000"
     environment:

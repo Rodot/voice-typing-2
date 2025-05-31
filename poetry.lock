@@ -1336,6 +1336,18 @@ files = [
 ]
 
 [[package]]
+name = "types-pynput"
+version = "1.8.1.20250318"
+description = "Typing stubs for pynput"
+optional = false
+python-versions = ">=3.9"
+groups = ["dev"]
+files = [
+    {file = "types_pynput-1.8.1.20250318-py3-none-any.whl", hash = "sha256:0c1038aa1550941633114a2728ad85e392f67dfba970aebf755e369ab57aca70"},
+    {file = "types_pynput-1.8.1.20250318.tar.gz", hash = "sha256:13d4df97843a7d1e7cddccbf9987aca7f0d463b214a8a35b4f53275d2c5a3576"},
+]
+
+[[package]]
 name = "types-requests"
 version = "2.32.0.20250328"
 description = "Typing stubs for requests"
@@ -1404,4 +1416,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "2c1fc337cb2687d2afd31f6d0a8f36d780d400aa66bb727487a00044d96ff7ca"
+content-hash = "6f9fe7724bd52b646358cfb33da365f4f2a6563eda761793312233f8f26e3050"
