@@ -43,7 +43,7 @@ class VoiceTypingApp:
         logger.info("Whisper ready, loading model...")
         self.whisper_client.transcribe("./voice_typing/assets/jfk.wav")
         logger.info(
-            "Voice typing: Press and hold Shift+F1 for English, Shift+F2 for French"
+            "Voice typing: Press and hold ALT+F2 for English, ALT+F3 for French"
         )
         self.sound_player.play("start_recording.wav")
         self.sound_player.play("stop_recording.wav")

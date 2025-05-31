@@ -22,8 +22,8 @@ class ShortcutTrigger:
         on_shortcut_release: Callable[[str], None],
     ) -> None:
         self.shortcuts: dict[frozenset, str] = {
-            frozenset([Key.shift_l, Key.f1]): "en",
-            frozenset([Key.shift_l, Key.f2]): "fr",
+            frozenset([Key.alt_l, Key.f2]): "en",
+            frozenset([Key.alt_l, Key.f3]): "fr",
         }
 
         self.on_shortcut_press = on_shortcut_press
